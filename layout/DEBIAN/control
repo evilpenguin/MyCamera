@@ -1,0 +1,9 @@
+Package: us.nakedproductions.mycamera
+Name: MyCamera
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Take photos without your camera button
+Maintainer: EvilPenguin|
+Author: EvilPenguin|
+Section: Tweaks
