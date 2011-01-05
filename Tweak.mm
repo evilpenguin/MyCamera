@@ -57,8 +57,8 @@ static void videoLoader(CFNotificationCenterRef center, void *observer, CFString
 }
 
 -(id)_shutterButton {
-	[%orig removeFromSuperview];
-	return nil;
+	//[%orig removeFromSuperview];
+	return %orig;
 }
 %end
 
