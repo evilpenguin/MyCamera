@@ -62,10 +62,10 @@ static void videoLoader(CFNotificationCenterRef center, void *observer, CFString
 }
 %end
 
-@interface VideoAcitvator : NSObject <LAListener> 
+@interface VideoActivator : NSObject <LAListener> 
 @end
 
-@implementation VideoAcitvator
+@implementation VideoActivator
 
 - (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event {
 	CFNotificationCenterPostNotificationWithOptions(CFNotificationCenterGetDarwinNotifyCenter(),
