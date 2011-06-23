@@ -19,9 +19,14 @@
 #import "libactivator.h"
 #import <substrate.h>
 
+static void toggleLoader(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+	PLCameraView *cameraView = (PLCameraView *)observer;
+	[cameraView _reallyToggleCamera]; 
+}
+
 static void cameraLoader(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
 	PLCameraView *cameraView = (PLCameraView *)observer;
-	[cameraView setCameraMode:0];
+	[cameraView setCameraMode:0]; //0 is for camera; 1 is for video; 2 is for flash light;
 	if ([cameraView _canTakePhoto]) { [cameraView _shutterButtonClicked]; }
 	else { [NSTimer scheduledTimerWithTimeInterval:2.0f target:cameraView selector:@selector(_shutterButtonClicked) userInfo:nil repeats:NO]; }
 }
@@ -30,7 +35,7 @@ static void cameraLoader(CFNotificationCenterRef center, void *observer, CFStrin
 static void videoLoader(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
 	PLCameraView *cameraView = (PLCameraView *)observer;
 	PLCameraController *controller = [$PLCameraController sharedInstance];
-	[cameraView setCameraMode:1];
+	[cameraView setCameraMode:1]; //0 is for camera; 1 is for video; 2 is for flash light;
 	if ([controller canCaptureVideo]) { [cameraView startVideoCapture]; }
 	else {  
 		[cameraView stopVideoCapture];
@@ -40,6 +45,13 @@ static void videoLoader(CFNotificationCenterRef center, void *observer, CFString
 
 %hook PLCameraView 
 - (id)initWithFrame:(CGRect)frame {
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), 
+									self, 
+									&toggleLoader, 
+									CFSTR("us.nakedproductions.MyCamera.toggle"), 
+									NULL, 
+									CFNotificationSuspensionBehaviorHold);
+	
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), 
 									self, 
 									&videoLoader, 
